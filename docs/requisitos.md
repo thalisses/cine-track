@@ -1,11 +1,11 @@
 #### Sete campos de um filmes
-- Nome
-- Gênero
-- Ano de lançamento
-- Diretor
-- Sinopse
-- Elenco
-- Classificação Geral
+- Título,
+- ano (1888 a 2030),
+- gênero,
+- URL do pôster
+- status
+- nota (1 a 5)
+- comentário.
 
 #### Operações da API
 
