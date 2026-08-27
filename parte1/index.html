@@ -6,27 +6,64 @@
     <title>CineTrack</title>
 </head>
 <body>
-    <h1>CineTrack</h1>
-    <p><strong>CineTrack</strong> é seu gerenciador pessoal de filmes: registre o que já viu, o que está vendo e o que quer ver.</p>
-    <h2>Status possíveis</h2>
-    <ol>
-        <li>Assistido</li>
-        <li>Assistindo</li>
-        <li>Quero assistir</li>
-    </ol>
-    <h2>Meus filmes favoritos</h2>
-    <ul>
-        <li>A Origem</li>
-        <li>Interstelar</li>
-        <li>Parasita</li>
-    </ul>
-    <h2>Sobre A Origem</h2>
-    <dl>
-        <dt>Diretor</dt> <dd>Christopher Nolan</dd>
-        <dt>Ano</dt> <dd>2010</dd>
-        <dt>Gênero</dt> <dd>Ficção científica</dd>
-    </dl>
-    <a href="adicionar.html"> + Adicionar filme</a>
-    <p>&copy; 2025 CineTrack</p>
+    <header>
+        <h1>CineTrack</h1>
+        <input type="search" aria-label="Buscar filme">
+        <button onclick="location.href='adicionar.html'" >+ Adicionar</button>
+    </header>
+    <nav aria-label="Filtros de status">
+        <button class="ativo">Todos</button>
+        <button>Assistido</button>
+        <button>Assistindo</button>
+        <button>Quero assistir</button>
+    </nav>
+    <main>
+        <section id="lista" aria-live="polite">
+            <article class="card">
+                <img src="../assets/a-origem.jpg" alt="Cartaz do filme A Origem"/>
+                <h2>A Origem</h2>
+                <p>2010 &bull; Ficção científica</p>
+                <p>Nota: &#9733; &#9733; &#9733; &#9733; &#9733;</p>
+                <p>assistido <span><button>Editar</button> <button>Remover</button></span></p>
+            </article>
+            <article class="card">
+                <img src="../assets/parasita.jpg" alt="Cartaz do filme Parasita"/>
+                <h2>Parasita</h2>
+                <p>2019 &bull; Suspense</p>
+                <p>Nota: &#9733; &#9733; &#9733; &#9733; &#9734;</p>
+                <p>assistido <span><button>Editar</button> <button>Remover</button></span></p>
+            </article>
+            <article class="card">
+                <img src="../assets/o-alto-da-compadecida.jpg" alt="Cartaz do filme O Auto da Compadecida"/>
+                <h2>O Auto da Compadecida</h2>
+                <p>2000 &bull; Comédia</p>
+                <p>Nota: &#9733; &#9733; &#9733; &#9733; &#9734;</p>
+                <p>assistido <span><button>Editar</button> <button>Remover</button></span></p>
+            </article>
+            <article class="card">
+                <img src="../assets/duna-parte-dois.jpg" alt="Cartaz do filme Duna: Parte Dois"/>
+                <h2>Duna: Parte Dois</h2>
+                <p>2024 &bull; Ficção científica</p>
+                <p>Nota: &#9733; &#9733; &#9733; &#9733; &#9734;</p>
+                <p>assistido <span><button>Editar</button> <button>Remover</button></span></p>
+            </article>
+            <article class="card">
+                <img src="../assets/interestelar.jpg" alt="Cartaz do filme Interestelar"/>
+                <h2>Interestelar</h2>
+                <p>2014 &bull; Ficção científica</p>
+                <p>Nota: &#9733; &#9733; &#9733; &#9733; &#9734;</p>
+                <p>assistido <span><button>Editar</button> <button>Remover</button></span></p>
+            </article>
+            <article class="card">
+                <img src="../assets/cidade-de-deus.jpg" alt="Cartaz do filme Cidade de Deus"/>
+                <h2>Cidade de Deus</h2>
+                <p>2002 &bull; Crime</p>
+                <p>Nota: &#9733; &#9733; &#9733; &#9733; &#9734;</p>
+                <p>assistido <span><button>Editar</button> <button>Remover</button></span></p>
+            </article>
+        </section>
+    </main>
+
+    <footer><small>&copy; 2026 CineTrack - UEM</small></footer>
 </body>
 </html>
