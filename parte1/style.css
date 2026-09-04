@@ -1,0 +1,41 @@
+/* primária: #1A3A5C
+ acento: #D97757
+ neutro: #E2E8F0*/
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html { font-size: 16px; }
+
+body {
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    background: #E2E8F0;
+    color: #1A3A5C;
+}
+
+img { max-width: 100%; display: block; }
+
+button { font: inherit; cursor: pointer; }
+
+header {
+    background: #1A3A5C;
+    padding: 12px;
+    color: white;
+}
+
+.card {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 4px #0002; 
+}
+
+header h1 {
+    color: white;
+    font-size: 2rem;
+}
