@@ -1,43 +1,115 @@
-/* primária: #1A3A5C
- acento: #D97757
- neutro: #E2E8F0*/
+    /* primária: #1A3A5C
+    acento: #D97757
+    neutro: #E2E8F0*/
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-html { font-size: 16px; }
+    html { font-size: 16px; }
 
-body {
-    font-family: system-ui, sans-serif;
-    line-height: 1.5;
-    background: #E2E8F0;
-    color: #1A3A5C;
-}
+    body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+        background: #E2E8F0;
+        color: #1A3A5C;
+    }
 
-img { max-width: 100%; display: block; }
+    img { max-width: 100%; display: block; }
 
-button { font: inherit; cursor: pointer; }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        background: #1A3A5C;
+        padding: 12px;
+        color: white;
+    }
 
-header {
-    background: #1A3A5C;
-    padding: 12px;
-    color: white;
-}
+    header button {
+        background: #D97757;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+    }
 
-.card {
-    background: white;
-    padding: 16px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 1px 4px #0002; 
-}
+    header h1 {
+        flex: 0 0 auto;
+        color: white;
+        font-size: 2rem;
+    }
 
-.card + .card { margin-top: 8px; }
+    header input{
+        flex: 1 1 240px;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
 
-header h1 {
-    color: white;
-    font-size: 2rem;
-}
+    nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 12px 24px;
+    }
+
+    nav button {
+        padding: 6px 14px;
+        border: 1px solid #1A3A5C;
+        background: white;
+        border-radius: 999px;
+        color: #1A3A5C;
+    }
+
+    nav button.ativo {
+        background: #1A3A5C;
+        color: white;
+    }
+
+    #lista {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 16px 24px;
+    }
+
+    .card {
+        width: 200px;
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 1px 4px #0002; 
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card button {
+        padding: 6px 14px;
+        border: 1px solid #1A3A5C;
+        background: white;
+        color: #1A3A5C;
+        border-radius: 4px;
+    }
+
+    .status {
+        padding: 6px 6px;
+        background: lightgray;
+        border-radius: 999px;
+        margin-bottom: 16px;
+        margin-top: 8px;
+        color: black;
+        font-size: 0.875rem;   
+    }
+
+    .card .acoes {
+        display: flex;
+        margin-top: auto;
+        gap: 8px;
+    }
