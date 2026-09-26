@@ -17,6 +17,18 @@
         color: #1A3A5C;
     }
 
+    h1 {
+        font-size: clamp(1.2rem, 1rem + 2.5vw, 2.5rem);
+    }
+
+    h2 {
+        font-size: clamp(1rem, 0.875rem + 2vw, 1.5rem);
+    }
+
+    p {
+        font-size: clamp(0.875rem, 0.75rem + 1.5vw, 1rem);
+    }
+
     img { max-width: 100%; display: block; }
 
     header {
@@ -36,6 +48,10 @@
         border: none;
         padding: 8px 16px;
         border-radius: 4px;
+    }
+
+    .texto-completo {
+        display: none;
     }
 
     header h1 {
@@ -72,14 +88,28 @@
     }
 
     #lista {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr;
         gap: 16px;
-        padding: 16px 24px;
+        padding: 16px;
+    }
+
+    @media (min-width: 1024px) {
+        .texto-curto {
+            display: none;
+        }
+
+        .texto-completo {
+            display: inline;
+        }
+
+        #lista {
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 48px;
+        }
     }
 
     .card {
-        width: 200px;
         background: white;
         padding: 16px;
         border-radius: 8px;
@@ -96,6 +126,13 @@
         background: white;
         color: #1A3A5C;
         border-radius: 4px;
+    }
+
+    .card img {
+        width: 100%;
+        aspect-ratio: 2/3;
+        object-fit: cover;
+        border-radius: 6px;
     }
 
     .status {
