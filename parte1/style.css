@@ -10,11 +10,65 @@
 
     html { font-size: 16px; }
 
+    :root {
+        color-scheme: light;
+        --cor-primaria: #1A3A5C;
+        --cor-cabecalho: #1A3A5C;
+        --cor-acento: #D97757;
+        --cor-fundo: #f5f5f5;
+        --cor-texto: #1f2937;
+        --cor-superficie: white;
+        --cor-texto-inverso: white;
+        --cor-texto-primaria: white;
+        --cor-borda: #ddd;
+        --cor-status: lightgray;
+        --cor-status-texto: black;
+        --cor-assistido: #DCFCE7;
+        --cor-assistido-texto: #166534;
+        --cor-assistindo: #FEF3C7;
+        --cor-assistindo-texto: #92400E;
+        --cor-quero: #DBEAFE;
+        --cor-quero-texto: #1E40AF;
+        --cor-modal-fundo: #f5f5f5;
+        --cor-modal-superficie: white;
+        --cor-modal-campo: white;
+        --cor-modal-texto: #1f2937;
+        --cor-sombra: #0002;
+    }
+
     body {
         font-family: system-ui, sans-serif;
         line-height: 1.5;
-        background: #E2E8F0;
-        color: #1A3A5C;
+        background: var(--cor-fundo);
+        color: var(--cor-texto);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            color-scheme: dark;
+            --cor-primaria: #8ABCE8;
+            --cor-cabecalho: #102A43;
+            --cor-acento: #E58B6C;
+            --cor-fundo: #121417;
+            --cor-texto: #F3F4F6;
+            --cor-superficie: #24282E;
+            --cor-texto-inverso: white;
+            --cor-texto-primaria: #102A43;
+            --cor-borda: #4B5563;
+            --cor-status: #374151;
+            --cor-status-texto: #F3F4F6;
+            --cor-assistido: #14532D;
+            --cor-assistido-texto: #DCFCE7;
+            --cor-assistindo: #78350F;
+            --cor-assistindo-texto: #FEF3C7;
+            --cor-quero: #1E3A8A;
+            --cor-quero-texto: #DBEAFE;
+            --cor-modal-fundo: #121417;
+            --cor-modal-superficie: #24282E;
+            --cor-modal-campo: #1A1D21;
+            --cor-modal-texto: #F3F4F6;
+            --cor-sombra: #0008;
+        }
     }
 
     h1 {
@@ -37,14 +91,14 @@
         align-items: center;
         gap: 16px;
         flex-wrap: wrap;
-        background: #1A3A5C;
+        background: var(--cor-cabecalho);
         padding: 12px;
-        color: white;
+        color: var(--cor-texto-inverso);
     }
 
     header button {
-        background: #D97757;
-        color: white;
+        background: var(--cor-acento);
+        color: var(--cor-texto-inverso);
         border: none;
         padding: 8px 16px;
         border-radius: 4px;
@@ -56,14 +110,14 @@
 
     header h1 {
         flex: 0 0 auto;
-        color: white;
+        color: var(--cor-texto-inverso);
         font-size: 2rem;
     }
 
     header input{
         flex: 1 1 240px;
         padding: 8px 12px;
-        border: 1px solid #ddd;
+        border: 1px solid var(--cor-borda);
         border-radius: 4px;
     }
 
@@ -76,15 +130,15 @@
 
     nav button {
         padding: 6px 14px;
-        border: 1px solid #1A3A5C;
-        background: white;
+        border: 1px solid var(--cor-primaria);
+        background: var(--cor-superficie);
         border-radius: 999px;
-        color: #1A3A5C;
+        color: var(--cor-primaria);
     }
 
     nav button.ativo {
-        background: #1A3A5C;
-        color: white;
+        background: var(--cor-primaria);
+        color: var(--cor-texto-primaria);
     }
 
     #lista {
@@ -110,11 +164,11 @@
     }
 
     .card {
-        background: white;
+        background: var(--cor-superficie);
         padding: 16px;
         border-radius: 8px;
-        border: 1px solid #ddd;
-        box-shadow: 0 1px 4px #0002; 
+        border: 1px solid var(--cor-borda);
+        box-shadow: 0 1px 4px var(--cor-sombra); 
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -122,9 +176,9 @@
 
     .card button {
         padding: 6px 14px;
-        border: 1px solid #1A3A5C;
-        background: white;
-        color: #1A3A5C;
+        border: 1px solid var(--cor-primaria);
+        background: var(--cor-superficie);
+        color: var(--cor-primaria);
         border-radius: 4px;
     }
 
@@ -136,17 +190,138 @@
     }
 
     .status {
-        padding: 6px 6px;
-        background: lightgray;
+        padding: 6px;
+        background: var(--cor-status);
         border-radius: 999px;
         margin-bottom: 16px;
         margin-top: 8px;
-        color: black;
+        color: var(--cor-status-texto);
         font-size: 0.875rem;   
+    }
+
+    .status.assistido {
+        background: var(--cor-assistido);
+        color: var(--cor-assistido-texto);
+    }
+
+    .status.assistindo {
+        background: var(--cor-assistindo);
+        color: var(--cor-assistindo-texto);
+    }
+
+    .status.quero {
+        background: var(--cor-quero);
+        color: var(--cor-quero-texto);
     }
 
     .card .acoes {
         display: flex;
         margin-top: auto;
         gap: 8px;
+    }
+
+    #modal {
+        position: fixed;
+        inset: 0;
+        background: var(--cor-modal-fundo);
+        color: var(--cor-modal-texto);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 16px;
+        overflow-y: auto;
+        z-index: 50;
+    }
+
+    #modal[hidden] {
+        display: none;
+    }
+
+    @keyframes aparecer {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal-conteudo {
+        width: 100%;
+        max-width: 480px;
+        animation: aparecer 200ms ease;
+    }
+
+    .modal-conteudo > a {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: var(--cor-primaria);
+        font-size: 0.875rem;
+    }
+
+    .modal-conteudo > h1 {
+        margin-bottom: 12px;
+        font-size: 1.25rem;
+    }
+
+    #form-filme {
+        display: grid;
+        gap: 6px;
+        padding: 16px;
+        background: var(--cor-modal-superficie);
+        border: 1px solid var(--cor-borda);
+        border-radius: 6px;
+        box-shadow: 0 2px 8px var(--cor-sombra);
+    }
+
+    #form-filme br {
+        display: none;
+    }
+
+    #form-filme label {
+        margin-top: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    #form-filme input,
+    #form-filme select,
+    #form-filme textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--cor-borda);
+        border-radius: 4px;
+        background: var(--cor-modal-campo);
+        color: var(--cor-modal-texto);
+        font: inherit;
+    }
+
+    #form-filme textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    .form-acoes {
+        display: flex;
+        gap: 8px;
+        margin-top: 6px;
+    }
+
+    .form-acoes button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+
+    .form-acoes button[type="button"] {
+        background: var(--cor-status);
+        color: var(--cor-status-texto);
+    }
+
+    .form-acoes button[type="submit"] {
+        background: var(--cor-acento);
+        color: var(--cor-texto-inverso);
     }
