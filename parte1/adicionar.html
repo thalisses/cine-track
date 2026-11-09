@@ -7,39 +7,44 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="modal">
+    <main id="modal">
       <div class="modal-conteudo">
         <a href="index.html">&larr; Voltar</a>
-        <h1>Adicionar filme</h1>
-        <form id="form-filme" action="/filmes" method="post">
+        <h1 id="titulo-pagina">Adicionar filme</h1>
+        <form id="form-filme">
           <label for="titulo">Título:</label>
           <input id="titulo" type="text" name="titulo" required /> <br />
           <label for="ano">Ano (1888 a 2030):</label>
-          <input id="ano" type="number" name="ano" min="1888" max="2030" />
+          <input
+            id="ano"
+            type="number"
+            name="ano"
+            min="1888"
+            max="2030"
+            required
+          />
           <br />
-          <label for="diretor">Diretor:</label>
-          <input id="diretor" type="text" name="diretor" /> <br />
           <label for="genero">Gênero:</label>
           <input id="genero" type="text" name="genero" required /> <br />
           <label for="poster">URL do pôster</label>
-          <input id="poster" type="url" name="poster" /> <br />
+          <input id="poster" type="url" name="poster" />
           <label for="status">Status:</label>
           <select id="status" name="status" required>
             <option value="assistido">Assistido</option>
+            <option value="assistindo">Assistindo</option>
             <option value="quero assistir">Quero assistir</option>
-            <option value="não assistido">Não assistido</option>
           </select>
-          <br />
           <label for="nota">Nota (1 a 5):</label>
-          <input id="nota" type="number" name="nota" min="1" max="5" /> <br />
+          <input id="nota" type="number" name="nota" min="1" max="5" required />
           <label for="comentario">Comentário:</label>
-          <textarea id="comentario" name="comentario"></textarea> <br />
+          <textarea id="comentario" name="comentario"></textarea>
           <div class="form-acoes">
-            <button type="button">Cancelar</button>
+            <a href="index.html">Cancelar</a>
             <button type="submit">Salvar</button>
           </div>
         </form>
       </div>
-    </div>
+    </main>
+    <script src="app.js"></script>
   </body>
 </html>
