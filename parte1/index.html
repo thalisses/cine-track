@@ -15,10 +15,7 @@
         aria-label="Buscar filme"
         placeholder="Buscar filme..."
       />
-      <button
-        onclick="location.href = 'adicionar.html'"
-        aria-label="Adicionar filme"
-      >
+      <button id="btn-adicionar" type="button" aria-label="Adicionar filme">
         <span class="texto-curto">+</span>
         <span class="texto-completo">+ Adicionar</span>
       </button>
@@ -29,6 +26,48 @@
       <button data-status="assistindo">Assistindo</button>
       <button data-status="quero assistir">Quero assistir</button>
     </nav>
+    <div id="modal" hidden>
+      <section
+        class="modal-conteudo"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-pagina"
+      >
+        <h1 id="titulo-pagina">Adicionar filme</h1>
+        <form id="form-filme" novalidate>
+          <label for="titulo">Título:</label>
+          <input id="titulo" type="text" name="titulo" required />
+          <label for="ano">Ano (1888 a 2030):</label>
+          <input
+            id="ano"
+            type="number"
+            name="ano"
+            min="1888"
+            max="2030"
+            required
+          />
+          <label for="genero">Gênero:</label>
+          <input id="genero" type="text" name="genero" required />
+          <label for="poster">URL do pôster:</label>
+          <input id="poster" type="url" name="poster" />
+          <label for="status">Status:</label>
+          <select id="status" name="status" required>
+            <option value="assistido">Assistido</option>
+            <option value="assistindo">Assistindo</option>
+            <option value="quero assistir">Quero assistir</option>
+          </select>
+          <label for="nota">Nota (1 a 5):</label>
+          <input id="nota" type="number" name="nota" min="1" max="5" required />
+          <label for="comentario">Comentário:</label>
+          <textarea id="comentario" name="comentario"></textarea>
+          <ul id="erros-form" role="alert" aria-live="assertive" hidden></ul>
+          <div class="form-acoes">
+            <button id="cancelar" type="button">Cancelar</button>
+            <button type="submit">Salvar</button>
+          </div>
+        </form>
+      </section>
+    </div>
     <main>
       <section id="lista" aria-live="polite"></section>
     </main>

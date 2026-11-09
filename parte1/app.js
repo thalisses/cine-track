@@ -9,6 +9,7 @@ const filmesIniciais = [
 ].map((filme, indice) => ({ id: String(indice + 1), ...filme }));
 const TOTAL = filmesIniciais.length;
 let filmes = [...filmesIniciais];
+let editandoId = null;
 
 function carregarFilmes() {
 	const dados = localStorage.getItem(CHAVE_FILMES);
@@ -44,52 +45,71 @@ const estrelas = (nota) => {
 	return resultado;
 };
 
-function escaparHTML(valor) {
-	return String(valor).replace(/[&<>"']/g, (caractere) => ({
-		"&": "&amp;",
-		"<": "&lt;",
-		">": "&gt;",
-		'"': "&quot;",
-		"'": "&#39;",
-	})[caractere]);
-}
-
 function atualizarRodape(total = TOTAL) {
 	const rodape = document.querySelector("#total-filmes");
 	if (rodape) rodape.textContent = `CineTrack © 2026 · ${total} filmes cadastrados.`;
+}
+
+function criarCard(filme) {
+	const card = document.createElement("article");
+	card.className = "card";
+	card.dataset.id = filme.id;
+
+	if (filme.poster) {
+		const poster = document.createElement("img");
+		poster.src = filme.poster;
+		poster.alt = `Cartaz do filme ${filme.titulo}`;
+		card.append(poster);
+	}
+
+	const titulo = document.createElement("h2");
+	titulo.textContent = filme.titulo;
+	const anoGenero = document.createElement("p");
+	anoGenero.textContent = `${filme.ano} • ${filme.genero}`;
+	const nota = document.createElement("p");
+	nota.textContent = `Nota: ${estrelas(Number(filme.nota))}`;
+	const status = document.createElement("p");
+	status.className = `status ${rotuloStatus(filme.status) === "quero" ? "quero" : filme.status}`;
+	status.textContent = rotuloStatus(filme.status);
+	card.append(titulo, anoGenero, nota, status);
+
+	if (filme.comentario) {
+		const comentario = document.createElement("p");
+		comentario.textContent = filme.comentario;
+		card.append(comentario);
+	}
+
+	const acoes = document.createElement("span");
+	acoes.className = "acoes";
+	const editar = document.createElement("button");
+	editar.type = "button";
+	editar.className = "btn-editar";
+	editar.dataset.id = filme.id;
+	editar.textContent = "Editar";
+	const remover = document.createElement("button");
+	remover.type = "button";
+	remover.className = "btn-remover";
+	remover.dataset.id = filme.id;
+	remover.textContent = "Remover";
+	acoes.append(editar, remover);
+	card.append(acoes);
+
+	return card;
 }
 
 function renderizarCards(lista) {
 	const secao = document.querySelector("#lista");
 	if (!secao) return;
 
-	secao.innerHTML = lista.map((filme) => {
-		const classeStatus = {
-			assistido: "assistido",
-			assistindo: "assistindo",
-			"quero assistir": "quero",
-		}[filme.status] ?? "";
-		const poster = filme.poster
-			? `<img src="${escaparHTML(filme.poster)}" alt="Cartaz do filme ${escaparHTML(filme.titulo)}" />`
-			: "";
-		const comentario = filme.comentario
-			? `<p>${escaparHTML(filme.comentario)}</p>`
-			: "";
-		const id = escaparHTML(filme.id);
-
-		return `<article class="card" data-id="${id}">
-			${poster}
-			<h2>${escaparHTML(filme.titulo)}</h2>
-			<p>${escaparHTML(filme.ano)} &bull; ${escaparHTML(filme.genero)}</p>
-			<p>Nota: ${estrelas(Number(filme.nota))}</p>
-			<p class="status ${classeStatus}">${escaparHTML(rotuloStatus(filme.status))}</p>
-			${comentario}
-			<span class="acoes">
-				<button type="button" class="btn-editar" data-id="${id}">Editar</button>
-				<button type="button" class="btn-remover" data-id="${id}">Remover</button>
-			</span>
-		</article>`;
-	}).join("") || "<p>Nenhum filme encontrado.</p>";
+	const fragmento = document.createDocumentFragment();
+	if (lista.length === 0) {
+		const vazio = document.createElement("p");
+		vazio.textContent = "Nenhum filme encontrado.";
+		fragmento.append(vazio);
+	} else {
+		for (const filme of lista) fragmento.append(criarCard(filme));
+	}
+	secao.replaceChildren(fragmento);
 }
 
 function renderizarFilmes() {
@@ -125,7 +145,8 @@ function configurarLista() {
 	document.querySelector("#lista").addEventListener("click", (evento) => {
 		const botaoEditar = evento.target.closest(".btn-editar");
 		if (botaoEditar) {
-			location.href = `adicionar.html?id=${encodeURIComponent(botaoEditar.dataset.id)}`;
+			const filme = filmes.find((item) => item.id === botaoEditar.dataset.id);
+			if (filme) abrir(filme);
 			return;
 		}
 
@@ -141,28 +162,76 @@ function configurarLista() {
 	renderizarFilmes();
 }
 
-function configurarFormulario() {
-	const formulario = document.querySelector("#form-filme");
-	if (!formulario) return;
+function validarFilme(filme) {
+	const erros = [];
+	if (!filme.titulo) erros.push("Informe o título do filme.");
+	if (!Number.isInteger(filme.ano) || filme.ano < 1888 || filme.ano > 2030) {
+		erros.push("O ano deve ser um número entre 1888 e 2030.");
+	}
+	if (!filme.genero) erros.push("Informe o gênero do filme.");
+	if (filme.poster) {
+		try {
+			const url = new URL(filme.poster, "https://cinetrack.local/");
+			if (url.protocol !== "http:" && url.protocol !== "https:") {
+				erros.push("O pôster deve usar uma URL HTTP ou HTTPS.");
+			}
+		} catch {
+			erros.push("Informe uma URL válida para o pôster.");
+		}
+	}
+	if (!["assistido", "assistindo", "quero assistir"].includes(filme.status)) {
+		erros.push("Selecione um status válido.");
+	}
+	if (!Number.isInteger(filme.nota) || filme.nota < 1 || filme.nota > 5) {
+		erros.push("A nota deve ser um número inteiro entre 1 e 5.");
+	}
+	return erros;
+}
 
-	const parametros = new URLSearchParams(location.search);
-	const idEdicao = parametros.get("id");
-	const filmes = carregarFilmes();
-	const filmeEdicao = filmes.find((filme) => filme.id === idEdicao);
-	if (idEdicao && filmeEdicao) {
-		document.querySelector("#titulo-pagina").textContent = "Editar filme";
+function gerarId() {
+	return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function abrir(filme = null) {
+	const formulario = document.querySelector("#form-filme");
+	formulario.reset();
+	document.querySelector("#erros-form").replaceChildren();
+	document.querySelector("#erros-form").hidden = true;
+	editandoId = filme?.id ?? null;
+	document.querySelector("#titulo-pagina").textContent = filme ? "Editar filme" : "Adicionar filme";
+
+	if (filme) {
 		for (const campo of formulario.elements) {
-			if (campo.name && filmeEdicao[campo.name] !== undefined) {
-				campo.value = filmeEdicao[campo.name];
+			if (campo.name && filme[campo.name] !== undefined) {
+				campo.value = filme[campo.name];
 			}
 		}
 	}
+	document.querySelector("#modal").hidden = false;
+	document.querySelector("#titulo").focus();
+}
 
+	function fechar() {
+		document.querySelector("#modal").hidden = true;
+		editandoId = null;
+	}
+
+function configurarModal() {
+	const formulario = document.querySelector("#form-filme");
+	if (!formulario) return;
+
+	document.querySelector("#btn-adicionar").addEventListener("click", () => abrir());
+	document.querySelector("#cancelar").addEventListener("click", fechar);
+	document.querySelector("#modal").addEventListener("click", (evento) => {
+		if (evento.target.id === "modal") fechar();
+	});
+	document.addEventListener("keydown", (evento) => {
+		if (evento.key === "Escape" && !document.querySelector("#modal").hidden) fechar();
+	});
 	formulario.addEventListener("submit", (evento) => {
 		evento.preventDefault();
 		const dados = Object.fromEntries(new FormData(formulario));
 		const filme = {
-			id: filmeEdicao?.id ?? String(Date.now()),
 			titulo: dados.titulo.trim(),
 			ano: Number(dados.ano),
 			genero: dados.genero.trim(),
@@ -171,14 +240,26 @@ function configurarFormulario() {
 			nota: Number(dados.nota),
 			comentario: dados.comentario.trim(),
 		};
+		const erros = validarFilme(filme);
+		const listaErros = document.querySelector("#erros-form");
+		listaErros.replaceChildren(...erros.map((mensagem) => {
+			const item = document.createElement("li");
+			item.textContent = mensagem;
+			return item;
+		}));
+		listaErros.hidden = erros.length === 0;
+		if (erros.length > 0) return;
 
-		const atualizados = filmeEdicao
-			? filmes.map((item) => item.id === filmeEdicao.id ? filme : item)
-			: [...filmes, filme];
-		salvarFilmes(atualizados);
-		location.href = "index.html";
+		if (editandoId) {
+			filmes = filmes.map((item) => item.id === editandoId ? { ...item, ...filme } : item);
+		} else {
+			filmes = [...filmes, { id: gerarId(), ...filme }];
+		}
+		salvarFilmes(filmes);
+		renderizarFilmes();
+		fechar();
 	});
 }
 
 configurarLista();
-configurarFormulario();
+configurarModal();
