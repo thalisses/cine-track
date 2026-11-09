@@ -7,6 +7,7 @@ const filmesIniciais = [
 	{ titulo: "Interestelar", ano: 2014, genero: "Ficção científica", poster: "../assets/interestelar.jpg", status: "quero assistir", nota: 4, comentario: "" },
 	{ titulo: "Cidade de Deus", ano: 2002, genero: "Crime", poster: "../assets/cidade-de-deus.jpg", status: "quero assistir", nota: 4, comentario: "" },
 ].map((filme, indice) => ({ id: String(indice + 1), ...filme }));
+const TOTAL = filmesIniciais.length;
 
 function carregarFilmes() {
 	const dados = localStorage.getItem(CHAVE_FILMES);
@@ -27,59 +28,83 @@ function salvarFilmes(filmes) {
 	localStorage.setItem(CHAVE_FILMES, JSON.stringify(filmes));
 }
 
-function criarElemento(tag, texto, classe) {
-	const elemento = document.createElement(tag);
-	if (texto !== undefined) elemento.textContent = texto;
-	if (classe) elemento.className = classe;
-	return elemento;
+function rotuloStatus(status) {
+	if (status === "assistido") return "assistido";
+	if (status === "assistindo") return "assistindo";
+	if (status === "quero assistir") return "quero";
+	return status;
+}
+
+const estrelas = (nota) => {
+	let resultado = "";
+	for (let indice = 1; indice <= 5; indice++) {
+		resultado += indice <= nota ? "★" : "☆";
+	}
+	return resultado;
+};
+
+function escaparHTML(valor) {
+	return String(valor).replace(/[&<>"']/g, (caractere) => ({
+		"&": "&amp;",
+		"<": "&lt;",
+		">": "&gt;",
+		'"': "&quot;",
+		"'": "&#39;",
+	})[caractere]);
+}
+
+function atualizarRodape(total = TOTAL) {
+	const rodape = document.querySelector("#total-filmes");
+	if (rodape) rodape.textContent = `CineTrack © 2026 · ${total} filmes cadastrados.`;
+}
+
+function renderizarCards(lista) {
+	const secao = document.querySelector("#lista");
+	if (!secao) return;
+
+	secao.innerHTML = lista.map((filme) => {
+		const classeStatus = {
+			assistido: "assistido",
+			assistindo: "assistindo",
+			"quero assistir": "quero",
+		}[filme.status] ?? "";
+		const poster = filme.poster
+			? `<img src="${escaparHTML(filme.poster)}" alt="Cartaz do filme ${escaparHTML(filme.titulo)}" />`
+			: "";
+		const comentario = filme.comentario
+			? `<p>${escaparHTML(filme.comentario)}</p>`
+			: "";
+		const id = escaparHTML(filme.id);
+
+		return `<article class="card" data-id="${id}">
+			${poster}
+			<h2>${escaparHTML(filme.titulo)}</h2>
+			<p>${escaparHTML(filme.ano)} &bull; ${escaparHTML(filme.genero)}</p>
+			<p>Nota: ${estrelas(Number(filme.nota))}</p>
+			<p class="status ${classeStatus}">${escaparHTML(rotuloStatus(filme.status))}</p>
+			${comentario}
+			<span class="acoes">
+				<button type="button" data-acao="editar" data-id="${id}">Editar</button>
+				<button type="button" data-acao="remover" data-id="${id}">Remover</button>
+			</span>
+		</article>`;
+	}).join("") || "<p>Nenhum filme encontrado.</p>";
 }
 
 function renderizarFilmes() {
-	const lista = document.querySelector("#lista");
-	if (!lista) return;
+	const secao = document.querySelector("#lista");
+	if (!secao) return;
 
 	const busca = document.querySelector("#busca").value.trim().toLocaleLowerCase("pt-BR");
 	const filtro = document.querySelector("nav .ativo").dataset.filtro;
-	const filmes = carregarFilmes().filter((filme) => {
+	const todosFilmes = carregarFilmes();
+	const filmes = todosFilmes.filter((filme) => {
 		const correspondeBusca = filme.titulo.toLocaleLowerCase("pt-BR").includes(busca);
 		return correspondeBusca && (filtro === "todos" || filme.status === filtro);
 	});
 
-	lista.replaceChildren();
-	if (filmes.length === 0) {
-		lista.append(criarElemento("p", "Nenhum filme encontrado."));
-		return;
-	}
-
-	for (const filme of filmes) {
-		const card = criarElemento("article", undefined, "card");
-		if (filme.poster) {
-			const poster = criarElemento("img");
-			poster.src = filme.poster;
-			poster.alt = `Cartaz do filme ${filme.titulo}`;
-			card.append(poster);
-		}
-		card.append(
-			criarElemento("h2", filme.titulo),
-			criarElemento("p", `${filme.ano} • ${filme.genero}`),
-			criarElemento("p", `Nota: ${"★".repeat(filme.nota)}${"☆".repeat(5 - filme.nota)}`),
-			criarElemento("p", filme.status, `status ${filme.status === "quero assistir" ? "quero" : filme.status}`),
-		);
-		if (filme.comentario) card.append(criarElemento("p", filme.comentario));
-
-		const acoes = criarElemento("span", undefined, "acoes");
-		const editar = criarElemento("button", "Editar");
-		editar.type = "button";
-		editar.dataset.acao = "editar";
-		editar.dataset.id = filme.id;
-		const remover = criarElemento("button", "Remover");
-		remover.type = "button";
-		remover.dataset.acao = "remover";
-		remover.dataset.id = filme.id;
-		acoes.append(editar, remover);
-		card.append(acoes);
-		lista.append(card);
-	}
+	renderizarCards(filmes);
+	atualizarRodape(todosFilmes.length);
 }
 
 function configurarLista() {
@@ -107,7 +132,13 @@ function configurarLista() {
 			renderizarFilmes();
 		}
 	});
-	renderizarFilmes();
+	if (localStorage.getItem(CHAVE_FILMES) === null) {
+		salvarFilmes(filmesIniciais);
+		renderizarCards(filmesIniciais);
+		atualizarRodape(TOTAL);
+	} else {
+		renderizarFilmes();
+	}
 }
 
 function configurarFormulario() {
