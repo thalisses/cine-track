@@ -1,4 +1,5 @@
-const CHAVE_FILMES = "cinetrack-filmes";
+const CHAVE_FILMES = "cinetrack:filmes";
+const CHAVE_FILMES_ANTERIOR = "cinetrack-filmes";
 const filmesIniciais = [
 	{ titulo: "A Origem", ano: 2010, genero: "Ficção científica", poster: "../assets/a-origem.jpg", status: "assistido", nota: 5, comentario: "" },
 	{ titulo: "Parasita", ano: 2019, genero: "Suspense", poster: "../assets/parasita.jpg", status: "assistido", nota: 4, comentario: "" },
@@ -8,25 +9,29 @@ const filmesIniciais = [
 	{ titulo: "Cidade de Deus", ano: 2002, genero: "Crime", poster: "../assets/cidade-de-deus.jpg", status: "quero assistir", nota: 4, comentario: "" },
 ].map((filme, indice) => ({ id: String(indice + 1), ...filme }));
 const TOTAL = filmesIniciais.length;
-let filmes = [...filmesIniciais];
 let editandoId = null;
+let statusAtual = "todos";
 
-function carregarFilmes() {
-	const dados = localStorage.getItem(CHAVE_FILMES);
-	if (!dados) {
-		localStorage.setItem(CHAVE_FILMES, JSON.stringify(filmesIniciais));
-		return [...filmesIniciais];
-	}
+function carregar() {
+	const dados = localStorage.getItem(CHAVE_FILMES)
+		?? localStorage.getItem(CHAVE_FILMES_ANTERIOR);
+	if (dados === null) return filmesIniciais.map((filme) => ({ ...filme }));
 
 	try {
-		const filmes = JSON.parse(dados);
-		return Array.isArray(filmes) ? filmes : [...filmesIniciais];
+		const filmesSalvos = JSON.parse(dados);
+		if (Array.isArray(filmesSalvos)) {
+			localStorage.setItem(CHAVE_FILMES, JSON.stringify(filmesSalvos));
+			return filmesSalvos;
+		}
 	} catch {
-		return [...filmesIniciais];
+		return filmesIniciais.map((filme) => ({ ...filme }));
 	}
+	return filmesIniciais.map((filme) => ({ ...filme }));
 }
 
-function salvarFilmes(filmes) {
+let filmes = carregar();
+
+function salvar() {
 	localStorage.setItem(CHAVE_FILMES, JSON.stringify(filmes));
 }
 
@@ -112,35 +117,44 @@ function renderizarCards(lista) {
 	secao.replaceChildren(fragmento);
 }
 
-function renderizarFilmes() {
-	const secao = document.querySelector("#lista");
-	if (!secao) return;
-
-	const busca = document.querySelector("#busca").value.trim().toLocaleLowerCase("pt-BR");
-	const filtro = document.querySelector("nav .ativo").dataset.status;
-	const filmesFiltrados = filmes.filter((filme) => {
-		const correspondeBusca = filme.titulo.toLocaleLowerCase("pt-BR").includes(busca);
-		return correspondeBusca && (filtro === "todos" || filme.status === filtro);
+function aplicarFiltros() {
+	const termo = document.querySelector("#busca").value.trim().toLocaleLowerCase("pt-BR");
+	return filmes.filter((filme) => {
+		const correspondeBusca = filme.titulo.toLocaleLowerCase("pt-BR").includes(termo);
+		const correspondeStatus = statusAtual === "todos" || filme.status === statusAtual;
+		return correspondeBusca && correspondeStatus;
 	});
+}
 
-	renderizarCards(filmesFiltrados);
+function atualizar() {
+	renderizarCards(aplicarFiltros());
 	atualizarRodape(filmes.length);
+}
+
+function debounce(funcao, atraso) {
+	let temporizador;
+	return (...argumentos) => {
+		clearTimeout(temporizador);
+		temporizador = setTimeout(() => funcao(...argumentos), atraso);
+	};
+}
+
+function aoDigitar() {
+	atualizar();
 }
 
 function configurarLista() {
 	if (!document.querySelector("#lista")) return;
 
-	document.querySelector("#busca").addEventListener("input", renderizarFilmes);
-	const dadosSalvos = localStorage.getItem(CHAVE_FILMES);
-	filmes = dadosSalvos === null ? [...filmesIniciais] : carregarFilmes();
-	if (dadosSalvos === null) salvarFilmes(filmes);
+	document.querySelector("#busca").addEventListener("input", debounce(aoDigitar, 300));
 
 	document.querySelector("nav").addEventListener("click", (evento) => {
 		const botao = evento.target.closest("button[data-status]");
 		if (!botao) return;
 		document.querySelector("nav .ativo").classList.remove("ativo");
 		botao.classList.add("ativo");
-		renderizarFilmes();
+		statusAtual = botao.dataset.status;
+		atualizar();
 	});
 	document.querySelector("#lista").addEventListener("click", (evento) => {
 		const botaoEditar = evento.target.closest(".btn-editar");
@@ -155,11 +169,11 @@ function configurarLista() {
 
 		if (window.confirm("Deseja remover este filme?")) {
 			filmes = filmes.filter((filme) => filme.id !== botaoRemover.dataset.id);
-			salvarFilmes(filmes);
-			renderizarFilmes();
+			salvar();
+			atualizar();
 		}
 	});
-	renderizarFilmes();
+	atualizar();
 }
 
 function validarFilme(filme) {
@@ -255,8 +269,8 @@ function configurarModal() {
 		} else {
 			filmes = [...filmes, { id: gerarId(), ...filme }];
 		}
-		salvarFilmes(filmes);
-		renderizarFilmes();
+		salvar();
+		atualizar();
 		fechar();
 	});
 }
