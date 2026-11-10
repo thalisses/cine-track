@@ -20,7 +20,7 @@ ocupada, o `live-server` exibirá a porta alternativa no terminal.
 
 ## Parte 2 — Usando Vite
 
-O frontend React inicial está em `frontend/`. Para executá-lo:
+O frontend React está em `frontend/`. Para executá-lo:
 
 ```sh
 cd frontend
