@@ -18,9 +18,24 @@ npx live-server .
 Abra `http://127.0.0.1:8080/parte1/` no navegador. Se a porta 8080 estiver
 ocupada, o `live-server` exibirá a porta alternativa no terminal.
 
+## Parte 2 — Usando Vite
+
+O frontend React inicial está em `frontend/`. Para executá-lo:
+
+```sh
+cd frontend
+npm install
+npm run dev
+```
+
+Abra o endereço exibido pelo Vite (por padrão, `http://localhost:5173`).
+Use `npm run lint` para verificar o código com Biome e `npm run format` para
+formatá-lo.
+
 ## Estrutura
 
 - `parte1/`: frontend interativo do catálogo.
+- `frontend/`: frontend React iniciado com Vite.
 - `assets/`: pôsteres dos filmes de exemplo.
 - `docs/requisitos.md`: campos do filme e contrato futuro da API.
 
