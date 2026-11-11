@@ -1,4 +1,4 @@
-export default function Header({ busca, aoBuscar }) {
+export default function Header({ busca, aoBuscar, aoAdicionar }) {
   return (
     <header>
       <h1>CineTrack</h1>
@@ -9,7 +9,7 @@ export default function Header({ busca, aoBuscar }) {
         value={busca}
         onChange={(evento) => aoBuscar(evento.target.value)}
       />
-      <button type="button" aria-label="Adicionar filme">
+      <button type="button" aria-label="Adicionar filme" onClick={aoAdicionar}>
         <span className="texto-curto">+</span>
         <span className="texto-completo">+ Adicionar</span>
       </button>

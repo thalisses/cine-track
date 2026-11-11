@@ -14,10 +14,12 @@ function estrelas(nota) {
   return '★'.repeat(nota) + '☆'.repeat(5 - nota)
 }
 
-export default function CardFilme({ filme }) {
+export default function CardFilme({ filme, aoEditar, aoRemover }) {
   return (
     <article className="card">
-      <img src={filme.poster} alt={`Cartaz do filme ${filme.titulo}`} />
+      {filme.poster && (
+        <img src={filme.poster} alt={`Cartaz do filme ${filme.titulo}`} />
+      )}
       <h2>{filme.titulo}</h2>
       <p>
         {filme.ano} • {filme.genero}
@@ -32,6 +34,14 @@ export default function CardFilme({ filme }) {
         {ROTULOS_STATUS[filme.status]}
       </p>
       {filme.comentario && <p>{filme.comentario}</p>}
+      <div className="acoes">
+        <button type="button" onClick={() => aoEditar(filme)}>
+          Editar
+        </button>
+        <button type="button" onClick={() => aoRemover(filme)}>
+          Remover
+        </button>
+      </div>
     </article>
   )
 }

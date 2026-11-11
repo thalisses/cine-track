@@ -67,3 +67,8 @@ export const filmesIniciais = [
     comentario: '',
   },
 ]
+
+export function gerarId(filmes) {
+  const ids = filmes.map((filme) => Number(filme.id)).filter(Number.isInteger)
+  return String(Math.max(0, ...ids) + 1)
+}
