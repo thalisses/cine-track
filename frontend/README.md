@@ -1,8 +1,7 @@
 # CineTrack — Frontend
 
-Frontend React com Vite. Os filmes iniciais são carregados por um mock
-assíncrono em `src/api.js`; cadastro, edição e remoção são mantidos em memória
-até a integração com o backend.
+Frontend React com Vite, conectado à API Node do CineTrack. Para executar
+ambos os serviços e configurar `VITE_API_URL`, consulte o README da raiz.
 
 ## Comandos
 

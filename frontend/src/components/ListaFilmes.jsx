@@ -1,6 +1,11 @@
 import CardFilme from './CardFilme.jsx'
 
-export default function ListaFilmes({ filmes, aoEditar, aoRemover }) {
+export default function ListaFilmes({
+  filmes,
+  aoEditar,
+  aoRemover,
+  desabilitado,
+}) {
   if (filmes.length === 0) {
     return (
       <section id="lista" aria-label="Lista de filmes">
@@ -17,6 +22,7 @@ export default function ListaFilmes({ filmes, aoEditar, aoRemover }) {
           filme={filme}
           aoEditar={aoEditar}
           aoRemover={aoRemover}
+          desabilitado={desabilitado}
         />
       ))}
     </section>

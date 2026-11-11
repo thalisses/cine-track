@@ -18,41 +18,24 @@ npx live-server .
 Abra `http://127.0.0.1:8080/parte1/` no navegador. Se a porta 8080 estiver
 ocupada, o `live-server` exibirá a porta alternativa no terminal.
 
-## Parte 2 — Usando Vite
+## Parte 2 — Como rodar o backend
 
-O frontend React está em `frontend/`. A listagem inicial usa um mock assíncrono
-em `src/api.js`; as alterações de cadastro, edição e remoção ficam em memória.
-Para executá-lo:
-
-```sh
-cd frontend
-npm install
-npm run dev
-```
-
-Abra o endereço exibido pelo Vite (por padrão, `http://localhost:5173`).
-Use `npm run lint` para verificar o código com Biome e `npm run format` para
-formatá-lo.
-
-## Backend — Node
-
-Na primeira execução, instale as dependências e gere o arquivo JSON inicial:
+Em um terminal, instale as dependências e configure a porta:
 
 ```sh
 cd backend
 npm install
-npm run seed
-```
-
-O seed grava seis filmes em `backend/data/filmes.json`. O backend usa
-`backend/.env` para configurar a porta (veja `backend/.env.example`). Inicie a
-API:
-
-```sh
+cp .env.example .env
 npm run dev
 ```
 
-Por padrão, o servidor fica em `http://localhost:3000`. A API oferece:
+Por padrão, a API fica em `http://localhost:3000`. Altere `PORT` no `.env` se
+a porta estiver ocupada. `npm start` inicia o servidor sem recarga automática.
+O arquivo `backend/data/filmes.json` já contém os seis filmes iniciais.
+Para restaurá-los, execute `npm run seed` no backend. **Esse comando substitui
+todos os dados existentes.**
+
+A API oferece:
 
 - `GET /filmes` (com filtro opcional `?status=`)
 - `GET /filmes/:id`
@@ -60,14 +43,31 @@ Por padrão, o servidor fica em `http://localhost:3000`. A API oferece:
 - `PUT /filmes/:id`
 - `DELETE /filmes/:id`
 
-`npm start` inicia o servidor sem recarga automática.
+## Parte 2 — Como rodar o frontend
+
+Com o backend em execução, abra outro terminal:
+
+```sh
+cd frontend
+npm install
+npm run dev
+```
+
+Abra o endereço exibido pelo Vite (por padrão, `http://localhost:5173`). O
+frontend usa `http://localhost:3000` para acessar a API. Se o backend estiver
+em outro endereço, copie `frontend/.env.example` para `frontend/.env.local`,
+ajuste `VITE_API_URL` e reinicie o Vite. A mesma variável deve ser configurada
+antes de `npm run build` para alterar o endereço no build de produção.
+
+Use `npm run lint` para verificar o código com Biome, `npm run format` para
+formatá-lo e `npm run build` para gerar a versão de produção.
 
 ## Estrutura
 
 - `parte1/`: frontend interativo do catálogo.
 - `frontend/`: frontend React iniciado com Vite.
-- `backend/`: API Node/Express e persistência inicial em JSON.
+- `backend/`: API Node/Express e persistência em arquivo JSON.
 - `assets/`: pôsteres dos filmes de exemplo.
 - `docs/requisitos.md`: campos do filme e contrato futuro da API.
 
-A Parte 2 evoluirá o projeto para uma aplicação full stack.
+O frontend e o backend da Parte 2 trabalham juntos como aplicação full stack.

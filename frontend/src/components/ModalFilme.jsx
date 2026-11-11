@@ -48,23 +48,31 @@ function validarFilme(dados) {
   return erros
 }
 
-export default function ModalFilme({ filme, aoSalvar, aoFechar }) {
+export default function ModalFilme({
+  filme,
+  aoSalvar,
+  aoFechar,
+  salvando,
+  erroSalvar,
+}) {
   const [dados, setDados] = useState(() => criarDadosIniciais(filme))
   const [erros, setErros] = useState([])
   const tituloRef = useRef(null)
 
   useEffect(() => {
     tituloRef.current?.focus()
+  }, [])
 
+  useEffect(() => {
     function aoPressionarTecla(evento) {
-      if (evento.key === 'Escape') {
+      if (evento.key === 'Escape' && !salvando) {
         aoFechar()
       }
     }
 
     document.addEventListener('keydown', aoPressionarTecla)
     return () => document.removeEventListener('keydown', aoPressionarTecla)
-  }, [aoFechar])
+  }, [aoFechar, salvando])
 
   function atualizarCampo(evento) {
     const { name, value } = evento.target
@@ -74,6 +82,7 @@ export default function ModalFilme({ filme, aoSalvar, aoFechar }) {
 
   function enviarFormulario(evento) {
     evento.preventDefault()
+    if (salvando) return
     const errosValidacao = validarFilme(dados)
     setErros(errosValidacao)
 
@@ -187,11 +196,19 @@ export default function ModalFilme({ filme, aoSalvar, aoFechar }) {
             </ul>
           )}
 
+          {erroSalvar && (
+            <p className="erro" role="alert">
+              Erro ao salvar filme: {erroSalvar}
+            </p>
+          )}
+
           <div className="form-acoes">
-            <button type="button" onClick={aoFechar}>
+            <button type="button" disabled={salvando} onClick={aoFechar}>
               Cancelar
             </button>
-            <button type="submit">Salvar</button>
+            <button type="submit" disabled={salvando}>
+              {salvando ? 'Salvando...' : 'Salvar'}
+            </button>
           </div>
         </form>
       </section>
