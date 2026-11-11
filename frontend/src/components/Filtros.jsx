@@ -1,12 +1,24 @@
-export default function Filtros() {
+const opcoes = [
+  { valor: 'todos', rotulo: 'Todos' },
+  { valor: 'assistido', rotulo: 'Assistido' },
+  { valor: 'assistindo', rotulo: 'Assistindo' },
+  { valor: 'quero assistir', rotulo: 'Quero assistir' },
+]
+
+export default function Filtros({ ativo, aoMudar }) {
   return (
     <nav aria-label="Filtros de status">
-      <button className="ativo" type="button">
-        Todos
-      </button>
-      <button type="button">Assistido</button>
-      <button type="button">Assistindo</button>
-      <button type="button">Quero assistir</button>
+      {opcoes.map((opcao) => (
+        <button
+          key={opcao.valor}
+          className={ativo === opcao.valor ? 'ativo' : ''}
+          type="button"
+          aria-pressed={ativo === opcao.valor}
+          onClick={() => aoMudar(opcao.valor)}
+        >
+          {opcao.rotulo}
+        </button>
+      ))}
     </nav>
   )
 }
