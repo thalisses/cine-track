@@ -34,10 +34,25 @@ Abra o endereço exibido pelo Vite (por padrão, `http://localhost:5173`).
 Use `npm run lint` para verificar o código com Biome e `npm run format` para
 formatá-lo.
 
+## Backend — Aula 1 de Node
+
+Para gerar o arquivo JSON inicial:
+
+```sh
+cd backend
+npm install
+npm run seed
+```
+
+O comando grava os seis filmes em `backend/data/filmes.json`. Os scripts
+`npm start` e `npm run dev` serão usados quando o servidor for criado na
+próxima aula.
+
 ## Estrutura
 
 - `parte1/`: frontend interativo do catálogo.
 - `frontend/`: frontend React iniciado com Vite.
+- `backend/`: seed JSON e dependências do futuro servidor Node.
 - `assets/`: pôsteres dos filmes de exemplo.
 - `docs/requisitos.md`: campos do filme e contrato futuro da API.
 
