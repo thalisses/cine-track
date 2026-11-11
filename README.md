@@ -44,14 +44,22 @@ npm install
 npm run seed
 ```
 
-O seed grava seis filmes em `backend/data/filmes.json`. Inicie a API:
+O seed grava seis filmes em `backend/data/filmes.json`. O backend usa
+`backend/.env` para configurar a porta (veja `backend/.env.example`). Inicie a
+API:
 
 ```sh
 npm run dev
 ```
 
-O servidor fica em `http://localhost:3000`. As rotas de leitura disponíveis
-são `GET /filmes`, `GET /filmes?status=assistido` e `GET /filmes/:id`.
+Por padrão, o servidor fica em `http://localhost:3000`. A API oferece:
+
+- `GET /filmes` (com filtro opcional `?status=`)
+- `GET /filmes/:id`
+- `POST /filmes`
+- `PUT /filmes/:id`
+- `DELETE /filmes/:id`
+
 `npm start` inicia o servidor sem recarga automática.
 
 ## Estrutura
