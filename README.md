@@ -20,7 +20,9 @@ ocupada, o `live-server` exibirá a porta alternativa no terminal.
 
 ## Parte 2 — Usando Vite
 
-O frontend React está em `frontend/`. Para executá-lo:
+O frontend React está em `frontend/`. A listagem inicial usa um mock assíncrono
+em `src/api.js`; as alterações de cadastro, edição e remoção ficam em memória.
+Para executá-lo:
 
 ```sh
 cd frontend

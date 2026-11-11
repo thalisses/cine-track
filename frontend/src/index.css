@@ -360,3 +360,8 @@ nav button.ativo {
 #lista > p {
   grid-column: 1 / -1;
 }
+
+.erro {
+  margin: 16px;
+  color: #b91c1c;
+}
